@@ -1,0 +1,29 @@
+***Method one:*** Till now we are launching only single instance. Now will launch multiple instance with names prod and dev.
+
+- Our main aim to maintain same environment in both the instances. If not app might work in dev but might cause issue in prod so will maintain same environment.
+- we will manage two state files because if there’s only one state file then there might be chances of mistakes which causes issue in production.
+- we will maintain two folders dev ,prod and one file [main.tf](http://main.tf) file for creating instances.
+    
+- We will create ***two remote state files in s3*** bucket with names prod and dev.
+- To tell which state file they should consider we will write two different files and mention the backend state file names which they need to consider.
+- we will write the [instance.tf](http://main.tf) file, the same instance.tf file is used for both the dev and prod because we wanted to maintain same infrastructure in both the instances.
+- The differences we gonna maintain are, for instance_type we use in prod is t2.small and dev is t3.micro. We will declare those using terraform.tfvars file.
+- Since, there are two state files we can run only one at a time. For that first we need to use the command *terraform init -backend-config=dev/backend.tf . So, that it will load that state file from now on.*
+- we need to give the terraform.tfvars with -var-file=filename to consider that t3.micro name with terraform plan and terraform apply
+    - *terraform apply -var-file=dev/terraform.tfvars*
+- So, now it will create dev instance in aws.
+- Now, you need to run the prod env but if you run what do you think terraform will go
+    - it will show as no changes because it’s still considering prods state file.
+- To change the state file to prod we need to again initialize then it will the state file
+    - *terraform init -reconfigure  --backend-config=prod/backend.tf*
+    - from now it will consider this as the state file.
+- Also to destroy the instances again we need to same commands like we used with the apply
+    - *terraform destroy -var-file=prod/terraform.tfvars*
+    - we need to give var-file because it won’t directly destroy the instances it will read complete [instance.tf](http://main.tf) for that it need var-file. So, now the prod instances got destroyed.
+- To destroy the dev instance we need to give *terraform init -reconfigure  --backend-config=dev/backend.tf*
+- *terraform destroy -var-file=dev/terraform.tfvars*
+- ***pros with this method:***
+    - no need to duplicate the code
+    - consistency
+- ***cons***:
+    - should be very cautious changes done in DEV may go to PROD also by mistake
