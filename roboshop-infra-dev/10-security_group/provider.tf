@@ -6,8 +6,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "roboshop-env-prod"
-    key    = "terraform-vpc_module"
+    bucket = "roboshop-env-dev"
+    key    = "terraform-security_group"
     region = "us-east-1"
     # dynamodb_table = "roboshop_state"   ##using dynamoDB
     encrypt      = true

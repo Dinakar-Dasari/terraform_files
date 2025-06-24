@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "roboshop-env-prod"
+    bucket = "roboshop-env-dev"
     key    = "terraform-vpc_module"
     region = "us-east-1"
     # dynamodb_table = "roboshop_state"   ##using dynamoDB
