@@ -37,3 +37,7 @@ data "aws_ami" "name" {
 data "aws_ssm_parameter" "vpn_sg_id" {
   name = "/${var.project}/roboshop_vpn"
 }
+
+data "aws_ssm_parameter" "alb_arn" {
+  name = "/${var.project}/${var.environment}/alb"
+}

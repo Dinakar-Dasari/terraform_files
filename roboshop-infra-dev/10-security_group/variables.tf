@@ -51,6 +51,6 @@ variable "rabbitmq_ports_vpn" {
   default = [22, 5672]
 }
 
-variable "catalogue_vpn" {
+variable "backend_vpn" {
   default = [22, 8080]
 }

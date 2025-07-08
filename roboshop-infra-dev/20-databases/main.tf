@@ -4,7 +4,7 @@ resource "aws_instance" "mongodb" {
   subnet_id              = local.database_subnet
   vpc_security_group_ids = [local.mongo_db]
   tags = {
-    Name = "mongodb"
+    Name = "mongodb-${var.environment}"
   }
 }
 
@@ -38,9 +38,9 @@ resource "aws_instance" "redis" {
   ami                    = data.aws_ami.name.id
   instance_type          = "t2.micro"
   subnet_id              = local.database_subnet
-  vpc_security_group_ids = [local.mongo_db]
+  vpc_security_group_ids = [local.redis]
   tags = {
-    Name = "redis"
+    Name = "redis-${var.environment}"
   }
 }
 
@@ -75,10 +75,10 @@ resource "aws_instance" "mysql" {
   ami                    = data.aws_ami.name.id
   instance_type          = "t2.micro"
   subnet_id              = local.database_subnet
-  vpc_security_group_ids = [local.mongo_db]
+  vpc_security_group_ids = [local.mysql]
   iam_instance_profile = "IAMroletofetchSSMparameter"  #to access SSM parameter need to access AWS
   tags = {
-    Name = "mysql"
+    Name = "mysql-${var.environment}"
   }
 }
 
@@ -112,9 +112,9 @@ resource "aws_instance" "rabbitmq" {
   ami                    = data.aws_ami.name.id
   instance_type          = "t2.micro"
   subnet_id              = local.database_subnet
-  vpc_security_group_ids = [local.mongo_db]
+  vpc_security_group_ids = [local.rabbitmq]
   tags = {
-    Name = "rabbitmq"
+    Name = "rabbitmq-${var.environment}"
   }
 }
 
@@ -146,7 +146,7 @@ resource "terraform_data" "rabbitmq" {
 
 resource "aws_route53_record" "mongodb" {
   zone_id = var.aws_zone_id
-  name    = "mongodb.${var.aws_zone_name}"
+  name    = "mongodb-${var.environment}.${var.aws_zone_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.mongodb.private_ip]
@@ -154,7 +154,7 @@ resource "aws_route53_record" "mongodb" {
 
 resource "aws_route53_record" "redis" {
   zone_id = var.aws_zone_id
-  name    = "redis.${var.aws_zone_name}"
+  name    = "redis-${var.environment}.${var.aws_zone_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.redis.private_ip]
@@ -162,7 +162,7 @@ resource "aws_route53_record" "redis" {
 
 resource "aws_route53_record" "mysql" {
   zone_id = var.aws_zone_id
-  name    = "mysql.${var.aws_zone_name}"
+  name    = "mysql-${var.environment}.${var.aws_zone_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.mysql.private_ip]
@@ -170,7 +170,7 @@ resource "aws_route53_record" "mysql" {
 
 resource "aws_route53_record" "rabbitmq" {
   zone_id = var.aws_zone_id
-  name    = "rabbitmq.${var.aws_zone_name}"
+  name    = "rabbitmq-${var.environment}.${var.aws_zone_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.rabbitmq.private_ip]

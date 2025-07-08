@@ -1,8 +1,8 @@
-resource "aws_ssm_parameter" "sg_id" {
-  name        = "/${var.project}/${var.environment}/${var.client}_sg_id"
+resource "aws_ssm_parameter" "frontend" {
+  name        = "/${var.project}/${var.environment}/${var.client}"
   description = "Stores the security group id for frontend"
   type        = "String"
-  value       = module.sg_frontend.sg_id
+  value       = module.frontend.sg_id
   tags = {
     Name = "${var.project}-${var.environment}-sg-id"
   }
@@ -29,11 +29,12 @@ resource "aws_ssm_parameter" "bastion_sg_id" {
 # }
 # }
 
-resource "aws_ssm_parameter" "backend_alb" {
-  name        = "/${var.project}/backend_alb"
-  description = "Stores the security group id of backend_alb"
+resource "aws_ssm_parameter" "backend_alb_sg" {
+  name        = "/${var.project}/backend_alb_sg"
+  description = "Stores the security group id of backend_alb_sg"
   type        = "String"
   value       = module.backend_alb.sg_id
+  overwrite = true
   tags = {
     Name = "${var.project}-backend-sg-id"
   }
@@ -96,5 +97,56 @@ resource "aws_ssm_parameter" "catalogue" {
   value       = module.catalogue.sg_id
   tags = {
     Name = "${var.project}-roboshop_catalogue-sg-id"
+  }
+}
+
+resource "aws_ssm_parameter" "cart" {
+  name        = "/${var.project}/${var.environment}/cart"
+  description = "Stores the security group id of cart"
+  type        = "String"
+  value       = module.cart.sg_id
+  tags = {
+    Name = "${var.project}-roboshop_cart-sg-id"
+  }
+}
+
+resource "aws_ssm_parameter" "shipping" {
+  name        = "/${var.project}/${var.environment}/shipping"
+  description = "Stores the security group id of shipping"
+  type        = "String"
+  value       = module.shipping.sg_id
+  tags = {
+    Name = "${var.project}-roboshop_shipping-sg-id"
+  }
+}
+
+resource "aws_ssm_parameter" "payment" {
+  name        = "/${var.project}/${var.environment}/payment"
+  description = "Stores the security group id of payment"
+  type        = "String"
+  value       = module.payment.sg_id
+  tags = {
+    Name = "${var.project}-roboshop_payment-sg-id"
+  }
+}
+
+resource "aws_ssm_parameter" "user" {
+  name        = "/${var.project}/${var.environment}/user"
+  description = "Stores the security group id of user"
+  type        = "String"
+  value       = module.user.sg_id
+  tags = {
+    Name = "${var.project}-roboshop_user-sg-id"
+  }
+}
+
+resource "aws_ssm_parameter" "frontend_alb_sg" {
+  name        = "/${var.project}/${var.environment}/frontend_alb_sg"
+  description = "Stores the security group id of frontend_alb"
+  type        = "String"
+  value       = module.frontend_alb.sg_id
+  overwrite = true
+  tags = {
+    Name = "${var.project}-frontend_alb-sg-id"
   }
 }

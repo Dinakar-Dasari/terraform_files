@@ -4,6 +4,6 @@ resource "aws_instance" "main" {
   subnet_id              = local.public_subnet
   vpc_security_group_ids = [local.security_group]
   tags = {
-    Name = "bastion"
+    Name = "bastion-${var.environment}"
   }
 }

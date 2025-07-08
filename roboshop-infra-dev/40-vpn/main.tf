@@ -6,6 +6,6 @@ resource "aws_instance" "vpn" {
   user_data              = file("openvpn.sh")
   key_name               = "roboshop"
   tags = {
-    Name = "vpn"
+    Name = "vpn-${var.environment}"
   }
 }

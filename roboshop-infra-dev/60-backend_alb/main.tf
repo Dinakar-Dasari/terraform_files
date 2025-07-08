@@ -1,6 +1,6 @@
 module "alb" {
   source                = "terraform-aws-modules/alb/aws"
-  name                  = "backend-alb"
+  name                  = "backend-alb-dev"
   vpc_id                = data.aws_ssm_parameter.vpc.value
   subnets               = split(",",data.aws_ssm_parameter.cidr_private.value) ##WE NEED alteast 2 subnets so not using [0] compared to other reosurces like bastion
   create_security_group = false
@@ -11,8 +11,9 @@ module "alb" {
 
 
 ### no target group is attached. So for testing purpose
-resource "aws_lb_listener" "front_end" {
+resource "aws_lb_listener" "backend" {
   load_balancer_arn = module.alb.arn
+  #When a public-facing Application Load Balancer (ALB) is accepting traffic from browsers or the internet, the listener ports should typically be: 80{http) or 443(https)
   port              = "80"
   protocol          = "HTTP"
 
@@ -28,10 +29,10 @@ resource "aws_lb_listener" "front_end" {
 }
 
 
-####people cannot search with DNS name so create a subdomain
+####  people cannot search with DNS name so create a subdomain
 resource "aws_route53_record" "backend_alb" {
   zone_id = var.aws_zone_id
-  name    = "*.backend.${var.aws_zone_name}"
+  name    = "*.backend-${var.environment}.${var.aws_zone_name}"
   type    = "A"
 
   alias {

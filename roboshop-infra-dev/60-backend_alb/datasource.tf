@@ -7,5 +7,5 @@ data "aws_ssm_parameter" "cidr_private" {
 }
 
 data "aws_ssm_parameter" "backend_alb_sg_id" {
-  name = "/${var.project}/backend_alb"
+  name = "/${var.project}/backend_alb_sg"
 }
